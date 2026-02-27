@@ -2,6 +2,13 @@
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
   "name": "KryptoPay",
+  "seo": {
+    "metatags": {
+      "description": "Accept stablecoin payments with KryptoPay.",
+      "og:image": "/images/og.jpg",
+      "twitter:card": "summary_large_image"
+    }
+  },
   "colors": {
     "primary": "#16A34A",
     "light": "#07C983",
