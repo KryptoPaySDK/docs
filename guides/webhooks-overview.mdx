@@ -1,0 +1,28 @@
+---
+title: "Webhooks overview"
+description: "Design your system to consume KryptoPay webhook events safely."
+---
+
+KryptoPay webhook flows are part of production-grade reconciliation and event-driven processing.
+
+## Receiver design
+
+Your webhook endpoint should:
+
+- Accept `POST` JSON payloads
+- Verify signatures before processing
+- Return `2xx` quickly
+- Process events idempotently
+
+## Delivery model
+
+Webhook systems can produce retries and replayed events. Build handlers so the same event can be received more than once without double fulfillment.
+
+## Recommended architecture
+
+1. Verify signature and timestamp.
+2. Persist raw event and delivery metadata.
+3. Acknowledge quickly (`200`/`204`).
+4. Process asynchronously in a job queue.
+
+This keeps webhook availability high under burst traffic and partial downstream outages.

@@ -1,0 +1,30 @@
+---
+title: "Going live"
+description: "Production readiness checklist for KryptoPay integrations."
+---
+
+Use this checklist before enabling live transactions.
+
+## Integration checks
+
+- Your backend creates intents with live API keys.
+- Frontend receives only `client_secret`.
+- Checkout UI handles success, pending, close, and error paths.
+
+## Operational checks
+
+- Webhook receiver is deployed and monitored.
+- Idempotency is enforced in fulfillment logic.
+- Alerting exists for failed deliveries and processing errors.
+
+## Security checks
+
+- API keys are stored in secret manager/env vault, not in source control.
+- Key rotation runbook is documented.
+- Incident response path exists for compromised credentials.
+
+## Release checks
+
+- Validate with staging smoke tests.
+- Roll out gradually.
+- Track conversion, failures, and timeout rates after launch.

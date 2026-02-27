@@ -1,0 +1,30 @@
+---
+title: "Errors"
+description: "How to handle KryptoPay API and checkout errors."
+---
+
+KryptoPay returns structured JSON errors with stable `error` codes.
+
+## Common categories
+
+- Auth errors: missing/invalid API key
+- Validation errors: invalid body fields
+- State errors: expired intent
+- Internal errors: temporary server failures
+
+## Handling strategy
+
+- Do not retry invalid auth/validation requests.
+- Retry network and transient server failures with backoff.
+- Log request context and error code for support.
+- Show user-safe messages in UI and keep internal details in logs.
+
+## Example
+
+```json
+{
+  "error": "invalid_body"
+}
+```
+
+Error payload shape can vary by endpoint, but `error` remains the primary machine-readable field.

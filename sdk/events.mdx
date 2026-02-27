@@ -1,0 +1,31 @@
+---
+title: "Events"
+description: "Checkout callbacks you can subscribe to."
+---
+
+## `onSuccess(event)`
+
+Triggered when payment succeeds.
+
+Event fields include:
+
+- `payment_intent_id`
+- `tx_hash`
+- `chain`
+- `mode`
+
+## `onAwaitingConfirmation(event)`
+
+Triggered when transaction is submitted and awaiting final confirmation.
+
+## `onError(error)`
+
+Error object includes:
+
+- `code`
+- `message`
+- `recoverable`
+
+## `onClose()`
+
+Triggered when the modal closes.

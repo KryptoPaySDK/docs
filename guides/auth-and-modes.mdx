@@ -1,0 +1,36 @@
+---
+title: "Auth and modes"
+description: "How API authentication and test/live modes are enforced."
+---
+
+## Authentication
+
+KryptoPay payment-intent creation uses Bearer API key auth:
+
+- Header: `Authorization: Bearer <api_key>`
+
+Invalid or missing keys return auth errors.
+
+## Modes
+
+KryptoPay supports:
+
+- `testnet`
+- `mainnet`
+
+Mode is derived from the API key record, not from request body/query. This prevents clients from forcing test/live mode incorrectly.
+
+## Base URL
+
+Both modes currently use the same API host:
+
+- `https://api.kryptopay.xyz`
+
+The key you use determines mode behavior.
+
+## Security baseline
+
+- Create intents only from backend services.
+- Keep API keys in secure server-side secret storage.
+- Return only `client_secret` to browser/mobile clients.
+- Rotate keys regularly and revoke compromised keys.

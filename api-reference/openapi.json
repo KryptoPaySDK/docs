@@ -1,216 +1,321 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "OpenAPI Plant Store",
-    "description": "A sample API that uses a plant store as an example to demonstrate features in the OpenAPI specification",
-    "license": {
-      "name": "MIT"
-    },
-    "version": "1.0.0"
+    "title": "KryptoPay API",
+    "version": "1.0.0",
+    "description": "Public KryptoPay API for merchant payment integrations."
   },
   "servers": [
     {
-      "url": "http://sandbox.mintlify.com"
-    }
-  ],
-  "security": [
-    {
-      "bearerAuth": []
+      "url": "https://api.kryptopay.xyz",
+      "description": "KryptoPay API"
     }
   ],
   "paths": {
-    "/plants": {
-      "get": {
-        "description": "Returns all plants from the system that the user has access to",
-        "parameters": [
+    "/v1/payment_intents": {
+      "post": {
+        "operationId": "createPaymentIntent",
+        "summary": "Create payment intent",
+        "description": "Creates a payment intent. Mode is derived from the API key and cannot be overridden by request payload.",
+        "tags": [
+          "Payment Intents"
+        ],
+        "security": [
           {
-            "name": "limit",
-            "in": "query",
-            "description": "The maximum number of results to return",
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
+            "bearerAuth": []
           }
         ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreatePaymentIntentRequest"
+              },
+              "examples": {
+                "sdkCheckout": {
+                  "summary": "SDK checkout intent",
+                  "value": {
+                    "amount_units": 1500000,
+                    "chain": "base",
+                    "expires_in_minutes": 15,
+                    "lane": "sdk",
+                    "metadata": {
+                      "order_id": "ord_2026_1001"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
-            "description": "Plant response",
+            "description": "Payment intent created",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/CreatePaymentIntentResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation or request error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "invalidBody": {
+                    "value": {
+                      "error": "invalid_body"
+                    }
+                  },
+                  "walletInvalid": {
+                    "value": {
+                      "error": "wallet_invalid"
+                    }
                   }
                 }
               }
             }
           },
-          "400": {
-            "description": "Unexpected error",
+          "401": {
+            "description": "Authentication error",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "description": "Creates a new plant in the store",
-        "requestBody": {
-          "description": "Plant to add to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
-              }
-            }
-          },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "plant response",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Plant"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "missing": {
+                    "value": {
+                      "error": "api_key_missing"
+                    }
+                  },
+                  "invalid": {
+                    "value": {
+                      "error": "api_key_invalid"
+                    }
+                  }
                 }
               }
             }
           },
-          "400": {
-            "description": "unexpected error",
+          "404": {
+            "description": "Related resource not found",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "merchant": {
+                    "value": {
+                      "error": "merchant_not_found"
+                    }
+                  }
                 }
               }
             }
-          }
-        }
-      }
-    },
-    "/plants/{id}": {
-      "delete": {
-        "description": "Deletes a single plant based on the ID supplied",
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "description": "ID of plant to delete",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int64"
-            }
-          }
-        ],
-        "responses": {
-          "204": {
-            "description": "Plant deleted",
-            "content": {}
           },
-          "400": {
-            "description": "unexpected error",
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/Error"
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "conflict": {
+                    "value": {
+                      "error": "conflict"
+                    }
+                  }
                 }
               }
             }
-          }
-        }
-      }
-    }
-  },
-  "webhooks": {
-    "/plant/webhook": {
-      "post": {
-        "description": "Information about a new plant added to the store",
-        "requestBody": {
-          "description": "Plant added to the store",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/NewPlant"
+          },
+          "500": {
+            "description": "Internal error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                },
+                "examples": {
+                  "internal": {
+                    "value": {
+                      "error": "internal_error"
+                    }
+                  }
+                }
               }
             }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Return a 200 status to indicate that the data was received successfully"
           }
         }
       }
     }
   },
   "components": {
-    "schemas": {
-      "Plant": {
-        "required": [
-          "name"
-        ],
-        "type": "object",
-        "properties": {
-          "name": {
-            "description": "The name of the plant",
-            "type": "string"
-          },
-          "tag": {
-            "description": "Tag to specify the type",
-            "type": "string"
-          }
-        }
-      },
-      "NewPlant": {
-        "allOf": [
-          {
-            "$ref": "#/components/schemas/Plant"
-          },
-          {
-            "required": [
-              "id"
-            ],
-            "type": "object",
-            "properties": {
-              "id": {
-                "description": "Identification number of the plant",
-                "type": "integer",
-                "format": "int64"
-              }
-            }
-          }
-        ]
-      },
-      "Error": {
-        "required": [
-          "error",
-          "message"
-        ],
-        "type": "object",
-        "properties": {
-          "error": {
-            "type": "integer",
-            "format": "int32"
-          },
-          "message": {
-            "type": "string"
-          }
-        }
-      }
-    },
     "securitySchemes": {
       "bearerAuth": {
         "type": "http",
-        "scheme": "bearer"
+        "scheme": "bearer",
+        "bearerFormat": "API Key"
+      }
+    },
+    "schemas": {
+      "CreatePaymentIntentRequest": {
+        "type": "object",
+        "required": [
+          "amount_units"
+        ],
+        "properties": {
+          "amount_units": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Payment amount in smallest token units (USDC uses 6 decimals)."
+          },
+          "chain": {
+            "type": "string",
+            "enum": [
+              "base",
+              "polygon"
+            ]
+          },
+          "wallet_address": {
+            "type": "string",
+            "pattern": "^0x[a-fA-F0-9]{40}$",
+            "description": "Optional recipient wallet override."
+          },
+          "expires_in_minutes": {
+            "type": "integer",
+            "description": "Intent expiry in minutes. Server clamps to 5..60."
+          },
+          "lane": {
+            "type": "string",
+            "enum": [
+              "sdk",
+              "manual"
+            ]
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "token": {
+            "type": "string",
+            "enum": [
+              "USDC"
+            ],
+            "description": "Optional token selector. Currently USDC only."
+          }
+        },
+        "additionalProperties": false
+      },
+      "CreatePaymentIntentResponse": {
+        "type": "object",
+        "required": [
+          "id",
+          "status",
+          "client_secret",
+          "mode",
+          "chain",
+          "chain_id",
+          "confirmations_required",
+          "amount_units",
+          "decimals",
+          "token_symbol",
+          "token_address",
+          "expected_wallet",
+          "expires_at",
+          "expires_in_minutes",
+          "lane",
+          "metadata"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "example": "requires_payment"
+          },
+          "client_secret": {
+            "type": "string"
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "testnet",
+              "mainnet"
+            ]
+          },
+          "chain": {
+            "type": "string",
+            "enum": [
+              "base",
+              "polygon"
+            ]
+          },
+          "chain_id": {
+            "type": "integer"
+          },
+          "confirmations_required": {
+            "type": "integer"
+          },
+          "amount_units": {
+            "type": "integer"
+          },
+          "decimals": {
+            "type": "integer",
+            "example": 6
+          },
+          "token_symbol": {
+            "type": "string",
+            "example": "USDC"
+          },
+          "token_address": {
+            "type": "string"
+          },
+          "expected_wallet": {
+            "type": "string"
+          },
+          "expires_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "expires_in_minutes": {
+            "type": "integer"
+          },
+          "lane": {
+            "type": "string",
+            "enum": [
+              "sdk",
+              "manual"
+            ]
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        },
+        "additionalProperties": true
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "required": [
+          "error"
+        ],
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true
       }
     }
   }

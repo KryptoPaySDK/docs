@@ -1,0 +1,23 @@
+---
+title: "Troubleshooting"
+description: "Fix common SDK integration issues quickly."
+---
+
+## Modal does not open
+
+- Confirm `clientSecret` is present and current.
+- Confirm `baseUrl` is `https://api.kryptopay.xyz` (or your target env URL).
+
+## Auth errors creating intents
+
+- Verify your backend sends `Authorization: Bearer <api_key>`.
+- Verify key mode/environment matches your test scenario.
+
+## React modal never closes
+
+- Wire `onClose` to set your `open` state to `false`.
+
+## CORS/network failures
+
+- Check frontend origin policy and server/network access.
+- Confirm endpoint path and HTTPS configuration.

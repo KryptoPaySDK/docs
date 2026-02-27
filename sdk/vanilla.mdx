@@ -1,0 +1,32 @@
+---
+title: "Vanilla"
+description: "Open KryptoPay checkout in non-React web apps."
+---
+
+Use `openKryptoPayModal` to launch checkout directly.
+
+```ts
+import { openKryptoPayModal } from "@kryptopay/sdk";
+
+const modal = openKryptoPayModal({
+  clientSecret,
+  baseUrl: "https://api.kryptopay.xyz",
+  merchantName: "Acme Store",
+  defaultMethod: "wallet",
+  allowWallet: true,
+  allowManual: true,
+  onSuccess: (event) => {
+    console.log(event.payment_intent_id, event.tx_hash);
+  },
+  onError: (err) => {
+    console.error(err.code, err.message, err.recoverable);
+  },
+  onClose: () => {
+    console.log("closed");
+  },
+});
+
+// Optional:
+// modal.close();
+// console.log(modal.getState());
+```

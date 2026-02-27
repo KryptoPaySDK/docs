@@ -1,0 +1,34 @@
+---
+title: "React"
+description: "Use KryptoPay checkout as a controlled React component."
+---
+
+Use `KryptoPayModal` from `@kryptopay/sdk/react`.
+
+```tsx
+import { useState } from "react";
+import { KryptoPayModal } from "@kryptopay/sdk/react";
+
+export function Checkout({ clientSecret }: { clientSecret: string }) {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)}>Pay</button>
+
+      <KryptoPayModal
+        open={open}
+        clientSecret={clientSecret}
+        baseUrl="https://api.kryptopay.xyz"
+        merchantName="Acme Store"
+        onClose={() => setOpen(false)}
+        onSuccess={(event) => {
+          console.log("paid", event.payment_intent_id, event.tx_hash);
+        }}
+      />
+    </>
+  );
+}
+```
+
+`open` is controlled by your component state. Set it to `false` on `onClose`.

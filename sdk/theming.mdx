@@ -1,0 +1,30 @@
+---
+title: "Theming"
+description: "Brand the checkout experience to match your product."
+---
+
+You can customize checkout with:
+
+- Theme tokens (colors, radius, font)
+- CSS class overrides
+- Text label overrides
+
+```ts
+openKryptoPayModal({
+  clientSecret,
+  theme: {
+    colors: { brand: "#0ea5e9", background: "#0b1220" },
+    radius: { md: 12 },
+    font: { family: "Inter, sans-serif", size: 14 },
+  },
+  classNames: {
+    modal: "my-modal",
+    primaryButton: "my-primary-btn",
+  },
+  labels: {
+    title: "Checkout",
+    payWithWallet: "Pay with Wallet",
+    payManually: "Pay Manually",
+  },
+});
+```
