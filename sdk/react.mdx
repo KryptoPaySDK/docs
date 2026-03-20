@@ -19,7 +19,6 @@ export function Checkout({ clientSecret }: { clientSecret: string }) {
       <KryptoPayModal
         open={open}
         clientSecret={clientSecret}
-        baseUrl="https://api.kryptopay.xyz"
         merchantName="Acme Store"
         onClose={() => setOpen(false)}
         onSuccess={(event) => {

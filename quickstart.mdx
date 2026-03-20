@@ -114,7 +114,6 @@ import { openKryptoPayModal } from "@kryptopay/sdk";
 
 openKryptoPayModal({
   clientSecret,
-  baseUrl: "https://api.kryptopay.xyz",
   merchantName: "Acme Store",
   onSuccess: (event) => {
     console.log("paid", event.payment_intent_id, event.tx_hash);
