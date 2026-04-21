@@ -20,3 +20,6 @@ description: "Fix common SDK integration issues quickly."
 
 - Check frontend origin policy and server/network access.
 - Confirm endpoint path and HTTPS configuration.
+- `POST /v1/payment_intents` must be called from your backend, not browser code, because it uses an API key.
+- `POST /v1/payment_intents/resolve` is the browser-facing endpoint and should work from arbitrary merchant domains.
+- Do not keep API Gateway-managed CORS enabled for this API, because it will conflict with the route-specific Fastify CORS behavior.
