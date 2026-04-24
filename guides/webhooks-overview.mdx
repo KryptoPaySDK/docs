@@ -18,6 +18,15 @@ Your webhook endpoint should:
 
 Webhook systems can produce retries and replayed events. Build handlers so the same event can be received more than once without double fulfillment.
 
+## Payment events
+
+KryptoPay currently emits these payment lifecycle events:
+
+- `payment.succeeded`
+- `payment.mismatch`
+
+`payment.mismatch` means a payment was detected on-chain for the expected wallet, but the amount did not match the intent. The intent moves to `review_required` and should be handled manually by the merchant.
+
 ## Recommended architecture
 
 1. Verify signature and timestamp.
